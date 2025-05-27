@@ -1,0 +1,82 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true,
+        "node": true
+    },
+    "extends": [
+        "airbnb-base",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "prettier",
+        "plugin:prettier/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {},
+    "plugins": ["@typescript-eslint"],
+    "rules": {
+        "prettier/prettier": "error",
+        "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+                "js": "never",
+                "jsx": "never",
+                "ts": "never",
+                "tsx": "never"
+            }
+        ],
+        "import/no-anonymous-default-export": [
+            "error",
+            {
+                "allowAnonymousClass": false,
+                "allowAnonymousFunction": false,
+                "allowArray": true,
+                "allowArrowFunction": false,
+                "allowCallExpression": true,
+                "allowLiteral": false,
+                "allowObject": true
+            }
+        ],
+        "import/no-extraneous-dependencies": "warn",
+        "import/order": [
+            "error",
+            {
+                "alphabetize": {
+                    "caseInsensitive": true,
+                    "order": "asc"
+                },
+                "groups": [
+                    "builtin",
+                    "external",
+                    "internal",
+                    "parent",
+                    "sibling",
+                    "index",
+                    "object",
+                    "type"
+                ],
+                "newlines-between": "always"
+            }
+        ],
+        "no-underscore-dangle": "off",
+        "class-methods-use-this": "off",
+        "@typescript-eslint/no-explicit-any": "warn",
+        "no-return-await": "off",
+        "no-shadow": "off",
+        "max-len": "error",
+        "object-property-newline": "error",
+        "array-bracket-newline": "error",
+        "function-call-argument-newline": "error",
+        "newline-per-chained-call": "error"
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [".js", ".ts"],
+                "paths": ["src"]
+            }
+        }
+    }
+}

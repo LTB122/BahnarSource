@@ -1,0 +1,82 @@
+import { StyleSheet } from 'react-native';
+
+export default StyleSheet.create({
+  container: {
+    backgroundColor: '#F2F5FF',
+  },
+  toolbar: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  voiceButtonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: 70,
+    height: 28,
+    position: 'relative',
+  },
+  voiceButton: {
+    flex: 2,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#5F5F90',
+    borderRightWidth: 0,
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
+  },
+  voiceSelectionButton: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#5F5F90',
+    borderTopRightRadius: 8,
+    borderBottomRightRadius: 8,
+  },
+  voiceSelection: {
+    width: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#5F5F90',
+    borderRadius: 8,
+    position: 'absolute',
+    bottom: 32,
+    backgroundColor: 'white',
+  },
+  voiceSelectionItem: {
+    height: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  translateTitle: {
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  textLength: {
+    fontWeight: 'bold',
+    fontSize: 12,
+    marginTop: 12,
+  },
+  translateButton: {
+    width: 36,
+    height: 36,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#5876F9',
+    borderRadius: 18,
+  },
+  userPicture: {
+    width: 36,
+    height: 36,
+    borderRadius: 22,
+    borderWidth: 2,
+    borderColor: 'white',
+  },
+});

@@ -1,0 +1,12 @@
+torch>=2.2.0
+uvicorn
+setproctitle
+nltk
+numpy
+fastapi
+rank_bm25
+pyyaml
+vncorenlp
+transformers
+pydub
+sentencepiece

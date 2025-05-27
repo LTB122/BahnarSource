@@ -1,0 +1,45 @@
+import { StyleSheet } from 'react-native';
+
+export default StyleSheet.create({
+  tabbar: {
+    height: 38,
+    display: 'flex',
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    borderTopWidth: 2,
+    borderBottomWidth: 2,
+    borderTopColor: '#F9F9F9',
+    borderBottomColor: '#F9F9F9',
+  },
+  tab: {
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontWeight: 500,
+    fontSize: 12,
+  },
+  indicator: {
+    backgroundColor: '#1C45F9',
+    position: 'absolute',
+    left: 0,
+    bottom: -2,
+    right: 0,
+    height: 3,
+    borderRadius: 2,
+    zIndex: -1,
+    elevation: -1,
+  },
+  bottomBorder: {
+    height: 2,
+    backgroundColor: '#F9F9F9',
+    position: 'absolute',
+    zIndex: 0,
+    left: 0,
+    bottom: -2,
+    right: 0,
+  },
+});
