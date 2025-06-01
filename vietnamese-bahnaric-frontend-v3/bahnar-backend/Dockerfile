@@ -1,17 +1,24 @@
-FROM node:18-alpine as builder
+FROM node:18-alpine
+
 WORKDIR /app
-COPY package.json ./
-COPY yarn.lock ./
-RUN yarn install
+
+# Install dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy the rest of the application
 COPY . .
-RUN yarn run build
 
-FROM node:18-alpine AS server
-WORKDIR /app
-COPY package.json ./
-COPY yarn.lock ./
-
-RUN yarn install --production
-COPY --from=builder ./app/dist ./dist
+# Expose port
 EXPOSE 3501
-CMD ["yarn", "start"] 
+
+# Set environment variables
+ENV PORT=3501
+ENV BARTVIBA_URL=http://bartviba:10000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:3501/health || exit 1
+
+# Start the application
+CMD ["npm", "start"] 

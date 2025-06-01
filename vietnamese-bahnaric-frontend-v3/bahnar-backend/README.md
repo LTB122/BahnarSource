@@ -5,128 +5,127 @@ Backend API service for the Bahnar language learning platform, built with Node.j
 ## 🚀 Features
 
 - RESTful API endpoints for Bahnar language learning
-- Authentication and authorization
-- Database integration
-- API documentation
+- Integration with BARTViBa translation service
+- API documentation with Swagger UI
 - TypeScript support
 - Docker containerization
+- Health check endpoints
 
 ## 📋 Prerequisites
 
+### For Local Development
 - Node.js (v16 or higher)
-- Yarn or npm
-- Docker (optional)
-- MongoDB (local or remote)
+- npm or yarn
+- Git
+
+### For Docker Deployment
+- Docker and Docker Compose
 
 ## 🛠️ Installation
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd bahnar-backend
-```
+### Option 1: Local Development
 
-2. Install dependencies:
+1. Install dependencies:
 ```bash
-yarn install
-# or
+# Using npm
 npm install
+
+# Or using yarn
+yarn install
 ```
 
-3. Create a `.env` file in the root directory and configure your environment variables:
+2. Create a `.env` file in the root directory:
 ```env
-# Server Configuration
-PORT=3000
-
-# Database Configuration
-DATABASE_URL=mongodb://localhost:27017/bahnar_db
-
-# Authentication
-JWT_SECRET=your_super_secret_jwt_key_here
-
-# API Configuration
-API_PREFIX=/api/v1
-
-# Environment
-NODE_ENV=development
-
-# CORS Configuration
-CORS_ORIGIN=http://localhost:3000
-
-# Logging
-LOG_LEVEL=debug
+PORT=3501
+BARTVIBA_URL=http://localhost:10000
 ```
 
-### Environment Variables Explanation
-
-| Variable | Description | Default/Example |
-|----------|-------------|-----------------|
-| PORT | Port number for the server | 3000 |
-| DATABASE_URL | MongoDB connection URL | mongodb://localhost:27017/bahnar_db |
-| JWT_SECRET | Secret key for JWT token generation | your_super_secret_jwt_key_here |
-| API_PREFIX | API route prefix | /api/v1 |
-| NODE_ENV | Environment mode | development |
-| CORS_ORIGIN | Allowed origin for CORS | http://localhost:3000 |
-| LOG_LEVEL | Logging level | debug |
-
-> Note: Make sure to never commit the `.env` file to version control. A `.env.example` file is provided as a template.
-
-## 🏃‍♂️ Running the Application
-
-### Development Mode
+3. Start the server:
 ```bash
-yarn dev
-# or
-npm run dev
-```
-
-### Production Mode
-```bash
-yarn build
-yarn start
-# or
-npm run build
+# Using npm
 npm start
+
+# Or using yarn
+yarn start
 ```
 
-### Using Docker
+The service will be available at http://localhost:3501
+
+### Option 2: Docker Deployment
+
+#### Using Docker Compose (Recommended)
+
+The service is configured to run as part of the complete BahnarSource stack. From the root directory:
+
+```bash
+docker-compose up bahnar-backend
+```
+
+Or to run all services:
+
+```bash
+docker-compose up
+```
+
+#### Running Standalone
+
+To run just the backend service:
+
 ```bash
 docker build -t bahnar-backend .
-docker run -p 3000:3000 bahnar-backend
+docker run -p 3501:3501 bahnar-backend
 ```
+
+## 🔧 Configuration
+
+The service uses the following environment variables:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| PORT | Port number for the server | 3501 |
+| BARTVIBA_URL | URL of the BARTViBa translation service | http://bartviba:10000 |
 
 ## 📚 API Documentation
 
-API documentation is available at `/api-docs` when running the server.
+API documentation is available at `/api-docs` when running the server. The service provides the following endpoints:
+
+- `POST /translate`: Translate text between Vietnamese and Bahnar
+- `GET /health`: Health check endpoint
 
 ## 🧪 Testing
 
 ```bash
-yarn test
-# or
+# Using npm
 npm test
+
+# Or using yarn
+yarn test
 ```
 
 ## 📦 Project Structure
 
 ```
-src/
-├── config/         # Configuration files
-├── controllers/    # Route controllers
-├── middleware/     # Custom middleware
-├── models/        # Database models
-├── routes/        # API routes
-├── services/      # Business logic
-├── types/         # TypeScript type definitions
-└── utils/         # Utility functions
+.
+├── src/                # Source code
+│   ├── config/        # Configuration files
+│   ├── controllers/   # Route controllers
+│   ├── middleware/    # Custom middleware
+│   ├── routes/        # API routes
+│   ├── services/      # Business logic
+│   ├── types/         # TypeScript type definitions
+│   └── utils/         # Utility functions
+├── dist/              # Compiled JavaScript files
+├── Dockerfile         # Docker configuration
+├── package.json       # Dependencies and scripts
+├── tsconfig.json      # TypeScript configuration
+└── nodemon.json       # Nodemon configuration
 ```
 
 ## 🔐 Security Considerations
 
-1. Always use strong, unique values for `JWT_SECRET`
-2. Keep your `.env` file secure and never commit it to version control
-3. Use environment-specific values for different deployment environments
-4. Regularly rotate sensitive credentials
+1. The service is designed to run within a Docker network
+2. All sensitive configuration should be provided through environment variables
+3. The service communicates with BARTViBa through internal Docker network
 
 ## 🤝 Contributing
 
@@ -139,3 +138,66 @@ src/
 ## 📝 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🔍 Troubleshooting
+
+### Local Development Issues
+
+1. If Node.js dependencies issues occur:
+```bash
+# Remove node_modules and reinstall
+rm -rf node_modules
+
+# Using npm
+npm install
+
+# Or using yarn
+yarn install
+```
+
+2. If port 3501 is already in use:
+```bash
+# Find process using port 3501
+lsof -i :3501  # On Linux/Mac
+netstat -ano | findstr :3501  # On Windows
+# Kill the process or use a different port
+```
+
+3. If TypeScript compilation fails:
+```bash
+# Clear TypeScript cache
+rm -rf dist
+
+# Using npm
+npm run build
+
+# Or using yarn
+yarn build
+```
+
+### Docker Issues
+
+1. If the service fails to start, check the logs:
+```bash
+docker-compose logs bahnar-backend
+```
+
+2. If you need to rebuild the service:
+```bash
+docker-compose up --build bahnar-backend
+```
+
+3. If you need to restart the service:
+```bash
+docker-compose restart bahnar-backend
+```
+
+4. If you need to clear the build cache:
+```bash
+docker-compose build --no-cache bahnar-backend
+```
+
+5. If you can't connect to the service from other containers:
+- Check if the containers are on the same Docker network
+- Verify the environment variables are set correctly
+- Check the Docker logs for any startup errors

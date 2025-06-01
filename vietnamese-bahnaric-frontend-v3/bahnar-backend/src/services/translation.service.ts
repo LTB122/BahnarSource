@@ -8,13 +8,16 @@ import TranslationModel, { TranslationDocument } from "../models/translation.mod
 
 @injectable()
 class TranslationService {
+    private readonly BARTVIBA_URL: string;
+
     constructor() {
+        this.BARTVIBA_URL = process.env.BARTVIBA_URL || 'http://localhost:8000';
         logger.info("[Transaction] Init Transaction Service");
     }
 
     public async translate(text: string): Promise<string> {
         try {
-            const apiUrl = "http://localhost:10000/translate/vi_ba";
+            const apiUrl = `${this.BARTVIBA_URL}/translate/vi_ba`;
             const response = await axios.post(apiUrl, { text });
             return response.data;
         } catch (error) {
@@ -25,7 +28,7 @@ class TranslationService {
 
     public async getBahnarVoice(text: string, gender: string, region: string): Promise<string> {
         try {
-            const apiUrl = "http://localhost:10000/speak/vi_ba_v2";
+            const apiUrl = `${this.BARTVIBA_URL}/speak/vi_ba_v2`;
             const response = await axios.post(apiUrl, { text, gender, region });
             return response.data;
         } catch (error) {

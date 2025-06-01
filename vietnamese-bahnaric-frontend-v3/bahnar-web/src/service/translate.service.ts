@@ -3,11 +3,11 @@ import { CountTranslation, ResponseData, SavedTranslation, Translate } from '../
 import { axios } from '../utils/custom-axios';
 
 const translate = (text: string) => {
-  return axios.post<Translate>(`${BAHNAR_API_URL}translateBahnar`, { text });
+  return axios.post<Translate>(`${BAHNAR_API_URL}/translateBahnar`, { text });
 };
 
 const save = (src: string, tgt: string) => {
-  return axios.post<Translate>(`${BAHNAR_API_URL}translations`, { src, tgt });
+  return axios.post<Translate>(`${BAHNAR_API_URL}/translations`, { src, tgt });
 };
 
 const findAll = (option: {
@@ -18,7 +18,7 @@ const findAll = (option: {
   isFavorite?: boolean;
 }) => {
   return axios.get<ResponseData<SavedTranslation[]>>(
-    `${BAHNAR_API_URL}translations?limit=${option.limit}&offset=${option.offset}&${
+    `${BAHNAR_API_URL}/translations?limit=${option.limit}&offset=${option.offset}&${
       option.isFavorite !== undefined && 'isFavorite=' + option.isFavorite
     }&${option.sortBy ? 'sortBy=' + option.sortBy : ''}&${
       option.order ? 'order=' + option.order : ''
@@ -28,11 +28,11 @@ const findAll = (option: {
 };
 
 const countAll = () => {
-  return axios.post<ResponseData<CountTranslation>>(`${BAHNAR_API_URL}translations/total`, {});
+  return axios.post<ResponseData<CountTranslation>>(`${BAHNAR_API_URL}/translations/total`, {});
 };
 
 const markFavorite = (id: string, isFavorite: boolean) => {
-  return axios.patch<ResponseData<Translate>>(`${BAHNAR_API_URL}translations/${id}/favorite`, {
+  return axios.patch<ResponseData<Translate>>(`${BAHNAR_API_URL}/translations/${id}/favorite`, {
     isFavorite,
   });
 };

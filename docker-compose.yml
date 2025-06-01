@@ -1,0 +1,108 @@
+version: "3.8"
+
+services:
+    vncorenlp:
+        image: openjdk:11-jre-slim
+        working_dir: /app
+        volumes:
+            - ./BARTViBa/GraphTranslation/vncorenlp:/app/vncorenlp
+        command: >
+            bash -c "cd /app/vncorenlp && 
+            java -Xmx2g -jar VnCoreNLP-1.1.1.jar -p 9000 -a 'wseg,pos,ner,parse'"
+        ports:
+            - "9000:9000"
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:9000"]
+            interval: 10s
+            timeout: 5s
+            retries: 3
+            start_period: 10s
+        networks:
+            - bahnar-network
+
+    mongodb:
+        image: mongo:latest
+        ports:
+            - "27017:27017"
+        volumes:
+            - mongodb_data:/data/db
+        networks:
+            - bahnar-network
+
+    bartviba:
+        build:
+            context: ./BARTViBa
+            dockerfile: Dockerfile
+        ports:
+            - "10000:10000" # API port
+        volumes:
+            - ./BARTViBa/pretrained:/app/pretrained
+            - ./BARTViBa/data:/app/data
+        environment:
+            - PORT=10000
+            - VNCORENLP_URL=http://vncorenlp:9000
+        depends_on:
+            vncorenlp:
+                condition: service_healthy
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:10000/health"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
+        restart: unless-stopped
+        networks:
+            - bahnar-network
+
+    bahnar-backend:
+        build:
+            context: ./vietnamese-bahnaric-frontend-v3/bahnar-backend
+            dockerfile: Dockerfile
+        ports:
+            - "3501:3501"
+        depends_on:
+            - mongodb
+            - bartviba
+        environment:
+            - PORT=3501
+            - DB_URI=mongodb://mongodb:27017/bahnar-translator
+            - SERVICE_NAME=bahnar-backend
+            - TOKEN_TTL=7d
+            - COOKIE_KEY=your_cookie_key
+            - JWT_SECRET=your_jwt_secret
+            - HASH_ROUNDS=10
+            - BARTVIBA_URL=http://bartviba:10000
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:3501/health"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
+        restart: unless-stopped
+        networks:
+            - bahnar-network
+
+    bahnar-web:
+        build:
+            context: ./vietnamese-bahnaric-frontend-v3/bahnar-web
+            dockerfile: Dockerfile
+        ports:
+            - "3000:3000"
+        depends_on:
+            bahnar-backend:
+                condition: service_healthy
+        environment:
+            - REACT_APP_API_URL=http://localhost:3501
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:3000"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
+        restart: unless-stopped
+        networks:
+            - bahnar-network
+
+networks:
+    bahnar-network:
+        driver: bridge
+
+volumes:
+    mongodb_data:

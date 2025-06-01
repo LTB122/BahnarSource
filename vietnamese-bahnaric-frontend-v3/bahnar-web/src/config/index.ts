@@ -3,11 +3,12 @@ export const BahnarSpecialKeyEvents = {
   SPECIAL_KEY_PRESS: 'SPECIAL_KEY_PRESS',
 };
 
-export const API_URL = 'https://api.bahnar.fessior.dev/';
+// Sử dụng biến môi trường cho API URL
+export const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3501';
+export const BAHNAR_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3501';
+export const VOICE_API_URL = process.env.REACT_APP_VOICE_API_URL || 'https://api.fpt.ai';
+export const VOICE_API_KEY = process.env.REACT_APP_VOICE_API_KEY || 'dOhuC7M5My9tKMMJgkS5BuPfgeU3ghwW';
 
 // export const BAHNAR_API_URL: string = 'https://api.bahnar.fessior.dev/';
-export const BAHNAR_API_URL: string = 'http://localhost:3001/';
-
-export const VOICE_API_URL: string = 'https://api.fpt.ai/';
-
-export const VOICE_API_KEY: string = 'dOhuC7M5My9tKMMJgkS5BuPfgeU3ghwW';
+// export const VOICE_API_URL: string = 'https://api.fpt.ai/';
+// export const VOICE_API_KEY: string = 'dOhuC7M5My9tKMMJgkS5BuPfgeU3ghwW';

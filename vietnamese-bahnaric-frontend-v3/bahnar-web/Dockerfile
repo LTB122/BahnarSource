@@ -1,23 +1,26 @@
-# Use an official Node.js runtime as a base image
-FROM node:20
+FROM node:18-alpine
 
-# Set the working directory in the container
-WORKDIR /usr/src
+WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Install dependencies
 COPY package*.json ./
-
-# Install app dependencies
 RUN npm install
 
-# Copy the application code to the container
+# Copy the rest of the application
 COPY . .
 
-# Build the React app
+# Build the application
 RUN npm run build
 
-# Expose the port that the app will run on
+# Expose port
 EXPOSE 3000
 
-# Define the command to run your application
+# Set environment variables
+ENV NEXT_PUBLIC_API_URL=http://localhost:3501
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:3000 || exit 1
+
+# Start the application
 CMD ["npm", "start"]

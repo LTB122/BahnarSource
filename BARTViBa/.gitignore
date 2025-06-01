@@ -12,7 +12,7 @@ data/cache
 .DS_Store
 khangEnv/
 virrosluo/
-README.md
 logging/
 MyVenv/
 .vscode
+venv/

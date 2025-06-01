@@ -1,81 +1,97 @@
 # Bahnar Web Application
 
-Frontend web application for the Bahnar language learning platform, built with React, TypeScript, and Tailwind CSS.
+Frontend web application for the Bahnar language learning platform, built with React and Tailwind CSS.
 
 ## 🚀 Features
 
 - Modern, responsive user interface
 - Interactive language learning tools
 - Real-time translation capabilities
-- User authentication and profile management
-- Progressive Web App (PWA) support
 - Dark/Light mode
 - Multi-language support
+- Docker containerization with Nginx
 
 ## 📋 Prerequisites
 
+### For Local Development
 - Node.js (v16 or higher)
 - npm or yarn
 - Git
 
+### For Docker Deployment
+- Docker and Docker Compose
+
 ## 🛠️ Installation
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd bahnar-web
-```
+### Option 1: Local Development
 
-2. Install dependencies:
+1. Install dependencies:
 ```bash
 yarn install
 # or
 npm install
 ```
 
-3. Create a `.env` file in the root directory and configure your environment variables:
+2. Create a `.env` file in the root directory:
 ```env
-REACT_APP_API_URL=your_api_url
-REACT_APP_FIREBASE_CONFIG=your_firebase_config
+REACT_APP_API_URL=http://localhost:3501
 ```
 
-## 🏃‍♂️ Running the Application
-
-### Development Mode
+3. Start the development server:
 ```bash
 yarn start
 # or
 npm start
 ```
 
-### Production Build
+The application will be available at http://localhost:3000
+
+### Option 2: Docker Deployment
+
+#### Using Docker Compose (Recommended)
+
+The service is configured to run as part of the complete BahnarSource stack. From the root directory:
+
 ```bash
-yarn build
-# or
-npm run build
+docker-compose up bahnar-web
 ```
 
-### Using Docker
+Or to run all services:
+
+```bash
+docker-compose up
+```
+
+#### Running Standalone
+
+To run just the web application:
+
 ```bash
 docker build -t bahnar-web .
-docker run -p 3000:80 bahnar-web
+docker run -p 80:80 bahnar-web
 ```
+
+## 🔧 Configuration
+
+The service uses the following environment variables:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| REACT_APP_API_URL | URL of the backend API | http://localhost:3501 |
 
 ## 📦 Project Structure
 
 ```
-src/
-├── assets/        # Static assets (images, fonts, etc.)
-├── components/    # Reusable React components
-├── config/        # Configuration files
-├── contexts/      # React contexts
-├── hooks/         # Custom React hooks
-├── layouts/       # Layout components
-├── pages/         # Page components
-├── services/      # API services
-├── styles/        # Global styles and Tailwind config
-├── types/         # TypeScript type definitions
-└── utils/         # Utility functions
+.
+├── public/           # Static files
+├── src/             # Source code
+│   ├── components/  # React components
+│   ├── pages/      # Page components
+│   ├── styles/     # CSS styles
+│   └── utils/      # Utility functions
+├── Dockerfile       # Docker configuration
+├── nginx.conf      # Nginx configuration
+└── package.json    # Dependencies and scripts
 ```
 
 ## 🎨 Styling
@@ -90,18 +106,10 @@ yarn test
 npm test
 ```
 
-## 📱 Progressive Web App
-
-The application is configured as a Progressive Web App (PWA), providing:
-- Offline functionality
-- Installable on devices
-- Push notifications (if configured)
-
 ## 🔧 Development Tools
 
 - ESLint for code linting
 - Prettier for code formatting
-- Husky for git hooks
 - TypeScript for type safety
 
 ## 🤝 Contributing
@@ -115,3 +123,53 @@ The application is configured as a Progressive Web App (PWA), providing:
 ## 📝 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🔍 Troubleshooting
+
+### Local Development Issues
+
+1. If Node.js dependencies issues occur:
+```bash
+# Remove node_modules and reinstall
+rm -rf node_modules
+npm install
+```
+
+2. If port 3000 is already in use:
+```bash
+# Find process using port 3000
+lsof -i :3000  # On Linux/Mac
+netstat -ano | findstr :3000  # On Windows
+# Kill the process or use a different port
+```
+
+3. If build fails:
+```bash
+# Clear npm cache
+npm cache clean --force
+# Remove node_modules and reinstall
+rm -rf node_modules
+npm install
+```
+
+### Docker Issues
+
+1. If the service fails to start, check the logs:
+```bash
+docker-compose logs bahnar-web
+```
+
+2. If you need to rebuild the service:
+```bash
+docker-compose up --build bahnar-web
+```
+
+3. If you need to restart the service:
+```bash
+docker-compose restart bahnar-web
+```
+
+4. If you need to clear the build cache:
+```bash
+docker-compose build --no-cache bahnar-web
+```
