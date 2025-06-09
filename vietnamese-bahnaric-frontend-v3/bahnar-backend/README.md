@@ -37,7 +37,13 @@ yarn install
 2. Create a `.env` file in the root directory:
 ```env
 PORT=3501
-BARTVIBA_URL=http://localhost:10000
+DB_URI=mongodb://localhost:27017/bahnar-translator
+SERVICE_NAME=bahnar-backend
+TOKEN_TTL=7d
+COOKIE_KEY=your_cookie_key
+JWT_SECRET=your_jwt_secret
+HASH_ROUNDS=10
+BARTVIBA_URL=https://localhost:10000
 ```
 
 3. Start the server:
@@ -83,9 +89,15 @@ The service uses the following environment variables:
 | Variable | Description | Default |
 |----------|-------------|---------|
 | PORT | Port number for the server | 3501 |
-| BARTVIBA_URL | URL of the BARTViBa translation service | http://bartviba:10000 |
+| DB_URI | MongoDB connection string | mongodb://localhost:27017/bahnar-translator |
+| SERVICE_NAME | Name of the service | bahnar-backend |
+| TOKEN_TTL | Token time-to-live duration | 7d |
+| COOKIE_KEY | Secret key for cookie encryption | your_cookie_key |
+| JWT_SECRET | Secret key for JWT token generation | your_jwt_secret |
+| HASH_ROUNDS | Number of rounds for password hashing | 10 |
+| BARTVIBA_URL | URL of the BARTViBa translation service | https://localhost:10000 |
 
-## 📚 API Documentation
+## �� API Documentation
 
 API documentation is available at `/api-docs` when running the server. The service provides the following endpoints:
 

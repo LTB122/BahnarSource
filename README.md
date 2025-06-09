@@ -1,179 +1,217 @@
-# BahnarSource
+# BahnarSource - Vietnamese-Bahnar Translation System
 
-This README provides instructions on how to run the BahnarSource project using either local development or Docker deployment. The project consists of three main components: BARTViBa model service, Bahnar backend API, and Bahnar web frontend.
+A comprehensive translation system for Vietnamese to Bahnar language, built with modern technologies and microservices architecture.
 
-## Project Components:
+## 🏗️ System Architecture
 
-1. **BARTViBa Model Service:**
-   - Provides the translation model
-   - Runs on port 8000
-   - Handles translation requests from the backend
+The system consists of four main components:
 
-2. **Bahnar Backend API:**
-   - Provides REST API endpoints
-   - Runs on port 3501
-   - Communicates with BARTViBa model service
+### 1. BARTViBa Translation Service
+- Port: 10000
+- Features:
+  - Vietnamese-Bahnar translation using BART model
+  - Multiple model types support (BART, BART_CHUNK, BART_CHUNK_NER_ONLY)
+  - VNCoreNLP integration for text processing
+  - FastAPI-based REST API
 
-3. **Bahnar Web Frontend:**
-   - React-based web application
-   - Runs on port 80
-   - Communicates with the backend API
+### 2. VNCoreNLP Service
+- Port: 9000
+- Features:
+  - Vietnamese text processing
+  - Word segmentation
+  - Part-of-speech tagging
+  - Named entity recognition
+  - Dependency parsing
 
-## Prerequisites:
+### 3. Bahnar Backend API
+- Port: 3501
+- Features:
+  - RESTful API endpoints
+  - User authentication
+  - Translation request handling
+  - MongoDB integration
+  - Swagger documentation
 
-### For Local Development:
+### 4. Bahnar Web Frontend
+- Port: 80 (production) / 3000 (development)
+- Features:
+  - Modern React-based UI
+  - Real-time translation
+  - Dark/light mode
+  - Responsive design
+  - Tailwind CSS styling
+
+## 🔧 Local Installation Guide
+
+### 1. Prerequisites
+- Node.js 16.x or higher
 - Python 3.8 or higher
-- Node.js 16 or higher
-- npm or yarn
-- Git
+- MongoDB (Community Server or MongoDB Compass)
+- Java 8 or higher (for VnCoreNLP)
 
-### For Docker Deployment:
-- Docker
-- Docker Compose
+### 2. Setup MongoDB
+Option 1: Using MongoDB Compass (Recommended)
+   - Download and install [MongoDB Compass](https://www.mongodb.com/try/download/compass)
+   - Open MongoDB Compass
+   - Click "New Connection"
+   - Choose one of these connection strings:
+     * Local MongoDB: `mongodb://localhost:27017`
+     * Docker MongoDB: `mongodb://mongodb:27017` (if using Docker)
+   - Click "Connect"
+   - Create new database named `bahnar-translator`
 
-## How to Run:
+Option 2: Install MongoDB Community Server
+   - Windows:
+     * Download and install from [MongoDB Community Server](https://www.mongodb.com/try/download/community)
+     * Start MongoDB service
+   - macOS:
+     * Using Homebrew: `brew tap mongodb/brew && brew install mongodb-community`
+     * Start MongoDB service: `brew services start mongodb-community`
+   - Create database directory: `mkdir -p ~/data/db`
 
-### Option 1: Local Development
-
-1. Clone the repository:
+### Step 1: Clone and Setup
 ```bash
 git clone <repository-url>
 cd BahnarSource
 ```
 
-2. Set up BARTViBa service:
+### Step 2: Environment Configuration
+
+1. **Backend (.env)**
+```env
+PORT=3501
+DB_URI=mongodb://localhost:27017/bahnar-translator
+SERVICE_NAME=bahnar-backend
+TOKEN_TTL=7d
+COOKIE_KEY=your_cookie_key
+JWT_SECRET=your_jwt_secret
+HASH_ROUNDS=10
+BARTVIBA_URL=http://localhost:10000
+```
+
+2. **Bahnar-Web (.env)**
+```env
+REACT_APP_API_URL=http://localhost:3501
+```
+
+### Step 3: Install and Run Services
+
+1. **BARTViBa Service**
 ```bash
 cd BARTViBa
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
+
+# Start VNCoreNLP server first
+java -Xmx2g -cp vncorenlp/VnCoreNLP-1.1.1.jar vncorenlp.VnCoreNLPServer -port 9000 -annotators "wseg,pos,ner,parse"
+
+# In a new terminal, start the BARTViBa service
 python app.py
 ```
 
-3. Set up Bahnar Backend:
+2. **Backend Service**
 ```bash
-cd ../vietnamese-bahnaric-frontend-v3/bahnar-backend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-python app.py
-```
-
-4. Set up Bahnar Web:
-```bash
-cd ../bahnar-web
+cd vietnamese-bahnaric-frontend-v3/bahnar-backend
 npm install
-# Create .env file with REACT_APP_API_URL=http://localhost:3501
 npm start
 ```
 
-The services will be available at:
+3. **Frontend Service**
+```bash
+cd vietnamese-bahnaric-frontend-v3/bahnar-web
+npm install
+npm start
+```
+
+### Step 4: Verify Installation
+
+Access the following URLs in your browser:
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:3501
-- BARTViBa Model: http://localhost:10000
+- Translation Service: http://localhost:10000
+- API Documentation: http://localhost:3501/api-docs
 
-### Option 2: Docker Deployment (Recommended)
+## 📦 Docker Deployment (Optional)
 
-1. Clone the repository:
+If you prefer using Docker, follow these steps:
+
+### Prerequisites
+- Docker
+- Docker Compose
+
+### Quick Start with Docker
 ```bash
-git clone <repository-url>
-cd BahnarSource
-```
-
-2. Build and start all services:
-```bash
+# Build and start all services
 docker-compose up --build
+
+# Or run in background
+docker-compose up -d
 ```
 
-This will:
-- Build all necessary Docker images
-- Start all services in the correct order
-- Set up the required network between services
-- Mount necessary volumes for model files
+### Docker Commands
 
-The services will be available at:
-- Frontend: http://localhost
-- Backend API: http://localhost:3501
-- BARTViBa Model: http://localhost:8000
-
-### Running in Background
-
-To run the services in the background:
 ```bash
-docker-compose up --build -d
-```
-
-### Viewing Logs
-
-To view logs from all services:
-```bash
+# View logs
 docker-compose logs -f
-```
 
-To view logs from a specific service:
-```bash
-docker-compose logs -f [service-name]
-# Example: docker-compose logs -f bartviba
-```
-
-### Stopping the Services
-
-To stop all services:
-```bash
+# Stop services
 docker-compose down
+
+# Rebuild specific service
+docker-compose up --build [service-name]
 ```
 
-## Development
+## 🔍 Troubleshooting
 
-Each component has its own README with specific development instructions:
+### Common Issues
 
-- [BARTViBa/README.md](BARTViBa/README.md)
-- [vietnamese-bahnaric-frontend-v3/bahnar-backend/README.md](vietnamese-bahnaric-frontend-v3/bahnar-backend/README.md)
-- [vietnamese-bahnaric-frontend-v3/bahnar-web/README.md](vietnamese-bahnaric-frontend-v3/bahnar-web/README.md)
-
-## Troubleshooting
-
-### Local Development Issues
-
-1. If Python virtual environment issues occur:
+1. **Port Conflicts**
 ```bash
-# Remove existing venv
+# Check port usage
+netstat -ano | findstr :<port>  # Windows
+lsof -i :<port>  # Linux/Mac
+```
+
+2. **MongoDB Connection**
+- Ensure MongoDB is running
+- Check connection string in backend .env
+- Verify network connectivity
+
+3. **VNCoreNLP Issues**
+- Verify Java installation
+- Check port 9000 availability
+- Ensure correct JAR file path
+
+4. **Python Virtual Environment**
+```bash
+# If venv issues occur
 rm -rf venv
-# Create new venv
 python -m venv venv
-# Activate and reinstall dependencies
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-2. If Node.js dependencies issues occur:
+5. **Node.js Dependencies**
 ```bash
-# Remove node_modules and reinstall
+# If dependency issues occur
 rm -rf node_modules
 npm install
 ```
 
-### Docker Issues
+## 📚 Documentation
 
-1. If services fail to start, check the logs:
-```bash
-docker-compose logs
-```
+- API Documentation: http://localhost:3501/api-docs
+- Translation Service: http://localhost:10000/docs
 
-2. If you need to rebuild a specific service:
-```bash
-docker-compose up --build [service-name]
-# Example: docker-compose up --build bartviba
-```
+## 🤝 Contributing
 
-3. If you need to restart a specific service:
-```bash
-docker-compose restart [service-name]
-# Example: docker-compose restart bahnar-backend
-```
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
-4. If you need to clear all Docker resources:
-```bash
-docker-compose down -v
-docker system prune -a
-```
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

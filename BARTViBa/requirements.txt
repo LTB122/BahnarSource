@@ -7,6 +7,6 @@ fastapi
 rank_bm25
 pyyaml
 vncorenlp
-transformers
+transformers==4.30.2
 pydub
 sentencepiece
