@@ -104,7 +104,7 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
 # Start VNCoreNLP server first
-java -Xmx2g -cp vncorenlp/VnCoreNLP-1.1.1.jar vncorenlp.VnCoreNLPServer -port 9000 -annotators "wseg,pos,ner,parse"
+vncorenlp -Xmx2g "BARTVIBA\GraphTranslation\vncorenlp\VnCoreNLP-1.1.1.jar" -p 9000 -a "wseg,pos,ner,parse"
 
 # In a new terminal, start the BARTViBa service
 python app.py

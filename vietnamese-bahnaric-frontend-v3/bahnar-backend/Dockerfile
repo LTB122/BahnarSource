@@ -3,7 +3,7 @@ FROM node:16
 
 WORKDIR /app
 
-COPY vietnamese-bahnaric-frontend-v3/bahnar-backend /app
+COPY . /app
 
 RUN npm install
 
