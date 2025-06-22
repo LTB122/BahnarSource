@@ -100,6 +100,14 @@ REACT_APP_API_URL=http://localhost:3501
 * Checkpoint model: 
   The current best model is aligned_bartpho model. the checkpoint is stored at: 
   [Link](https://drive.google.com/drive/folders/10M4l95A7ImxfSPtV8JzAWNm5ytrUwOgC?usp=sharing)
+
+- Open the download link: Click the link above or paste it into your browser to access the model files on Google Drive.
+
+- Download all files: Download the entire folder or all the files inside the folder. Make sure you have all the necessary checkpoint files (e.g., pytorch_model.bin, config.json, tokenizer.json, etc.).
+
+- Create the `pretrained` folder: If you don’t have a folder named `pretrained` in your project directory, please create one.
+
+- Move the downloaded files: After downloading, move all model files into the `pretrained` folder.
 ```bash
 cd BARTViBa
 python -m venv venv
