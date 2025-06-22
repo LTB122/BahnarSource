@@ -97,6 +97,9 @@ REACT_APP_API_URL=http://localhost:3501
 ### Step 3: Install and Run Services
 
 1. **BARTViBa Service**
+* Checkpoint model: 
+  The current best model is aligned_bartpho model. the checkpoint is stored at: 
+  [Link](https://drive.google.com/drive/folders/10M4l95A7ImxfSPtV8JzAWNm5ytrUwOgC?usp=sharing)
 ```bash
 cd BARTViBa
 python -m venv venv
